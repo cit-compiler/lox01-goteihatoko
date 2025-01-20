@@ -1,14 +1,13 @@
+//> Statements and State environment-class
 package com.craftinginterpreters.lox;
 
 import java.util.HashMap;
 import java.util.Map;
 
 class Environment {
-
+//> enclosing-field
   final Environment enclosing;
-
   private final Map<String, Object> values = new HashMap<>();
-
   Environment() {
     enclosing = null;
   }
@@ -21,13 +20,14 @@ class Environment {
     if (values.containsKey(name.lexeme)) {
       return values.get(name.lexeme);
     }
+//> environment-get-enclosing
 
     if (enclosing != null) return enclosing.get(name);
+//< environment-get-enclosing
 
     throw new RuntimeError(name,
         "Undefined variable '" + name.lexeme + "'.");
   }
-
 
 
   void assign(Token name, Object value) {
@@ -36,20 +36,20 @@ class Environment {
       return;
     }
 
+//> environment-assign-enclosing
     if (enclosing != null) {
       enclosing.assign(name, value);
       return;
     }
 
+//< environment-assign-enclosing
     throw new RuntimeError(name,
         "Undefined variable '" + name.lexeme + "'.");
   }
 
-
   void define(String name, Object value) {
     values.put(name, value);
   }
-
 
   Environment ancestor(int distance) {
     Environment environment = this;
@@ -63,13 +63,11 @@ class Environment {
   Object getAt(int distance, String name) {
     return ancestor(distance).values.get(name);
   }
-//< Resolving and Binding get-at
-//> Resolving and Binding assign-at
+
   void assignAt(int distance, Token name, Object value) {
     ancestor(distance).values.put(name.lexeme, value);
   }
-//< Resolving and Binding assign-at
-//> omit
+
   @Override
   public String toString() {
     String result = values.toString();
@@ -79,5 +77,5 @@ class Environment {
 
     return result;
   }
-
+//< omit
 }
