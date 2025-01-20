@@ -1,4 +1,5 @@
-package com.craftinginterpreters;
+//> Evaluating Expressions runtime-error-class
+package com.craftinginterpreters.lox;
 
 class RuntimeError extends RuntimeException {
   final Token token;
